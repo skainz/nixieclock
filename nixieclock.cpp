@@ -6,7 +6,7 @@
 #define SPACE_DIGITS 25
 #define SPACE_HMS 50
 
-NixieClock::NixieClock(QWidget *parent)
+NixieClock::NixieClock(QWidget *parent) : QWidget(parent,Qt::FramelessWindowHint | Qt::WindowSystemMenuHint)
 {
   
   resultimage=new QImage(QSize(6*WIDTH+2*SPACE_HMS+3*SPACE_DIGITS,HEIGHT),QImage::Format_RGB32);
@@ -38,6 +38,7 @@ void NixieClock::showTime()
   QTime time = QTime::currentTime();
   
   QPainter painter(resultimage);;
+    painter.fillRect(0,0,6*WIDTH+2*SPACE_HMS+3*SPACE_DIGITS,HEIGHT,Qt::black);
   //hours
   painter.drawImage(0,0,*images[time.hour() /10]);
   painter.drawImage(WIDTH+SPACE_DIGITS,0,*images[time.hour() % 10]);
