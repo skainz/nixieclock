@@ -1,0 +1,15 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="digit0.png">images/WikipediaNixieDigit0.png</file>
+    <file alias="digit1.png">images/WikipediaNixieDigit1.png</file>
+    <file alias="digit2.png">images/WikipediaNixieDigit2.png</file>
+    <file alias="digit3.png">images/WikipediaNixieDigit3.png</file>
+    <file alias="digit4.png">images/WikipediaNixieDigit4.png</file>
+    <file alias="digit5.png">images/WikipediaNixieDigit5.png</file>
+    <file alias="digit6.png">images/WikipediaNixieDigit6.png</file>
+    <file alias="digit7.png">images/WikipediaNixieDigit7.png</file>
+    <file alias="digit8.png">images/WikipediaNixieDigit8.png</file>
+    <file alias="digit9.png">images/WikipediaNixieDigit9.png</file>
+</qresource>
+</RCC>
+
