@@ -1,15 +1,32 @@
 #include <QtWidgets>
 #include "nixieclock.h"
+#include <QDesktopWidget>
+// #include <QX11Info>
+#include <QtX11Extras/QX11Info>
+#include<X11/Xlib.h>
+#include <X11/Xutil.h>
 
 #define WIDTH 200
 #define HEIGHT 200
 #define SPACE_DIGITS 25
 #define SPACE_HMS 50
 
+
 NixieClock::NixieClock(QWidget *parent) : QWidget(parent,Qt::FramelessWindowHint | Qt::WindowSystemMenuHint)
 {
   
+    data = (char*)malloc(256*256*4);
   resultimage=new QImage(QSize(6*WIDTH+2*SPACE_HMS+3*SPACE_DIGITS,HEIGHT),QImage::Format_RGB32);
+
+
+/*
+    QDesktopWidget *qdw=QApplication::desktop();
+    Display * x11 = QX11Info::display();
+    Window root;
+    GC g;
+    root = DefaultRootWindow (x11);
+    g = XCreateGC (x11, root, 0, NULL);
+*/
   il=new QLabel();
   layout= new QBoxLayout(QBoxLayout::LeftToRight,this);
   
@@ -35,9 +52,29 @@ NixieClock::NixieClock(QWidget *parent) : QWidget(parent,Qt::FramelessWindowHint
 
 void NixieClock::showTime()
 {
+
+ QDesktopWidget *qdw=QApplication::desktop();
+    Display * x11 = QX11Info::display();
+    int screen_num = DefaultScreen(x11);
+    Window root;
+    GC g;
+    root = DefaultRootWindow (x11);
+    g = XCreateGC (x11, root, 0, NULL);
+
+    Visual *visual = DefaultVisual(x11,DefaultScreen(x11));
+
+     XSetForeground(x11, g, WhitePixelOfScreen(DefaultScreenOfDisplay(x11)) );
+    ximage=XCreateImage(x11,visual,DefaultDepth(x11,DefaultScreen(x11)),ZPixmap,0,data,256,256,32,0);
+
+  XFillRectangle (x11, root, g, random()%500, random()%500, 50, 40);
+
+
+
+
   QTime time = QTime::currentTime();
   
   QPainter painter(resultimage);;
+//    painter.beginNativePainting();// begin(QApplication::desktop()->screen( 0 ));
     painter.fillRect(0,0,6*WIDTH+2*SPACE_HMS+3*SPACE_DIGITS,HEIGHT,Qt::black);
   //hours
   painter.drawImage(0,0,*images[time.hour() /10]);
@@ -55,6 +92,24 @@ void NixieClock::showTime()
   
     il->setPixmap(QPixmap::fromImage(*resultimage));
   
+
+ for (int x=0;x<200;x++)
+    {
+    for (int y=0;y<200;y++)
+    {
+    QColor p=resultimage->pixelColor(x+1000,y);
+    int red=p.red()<<16|(p.green()<<8)|p.blue();
+        XPutPixel(ximage,x,y,red);
+
+    }
+    }
+
+
+   XPutImage(x11,root,DefaultGC(x11,screen_num),ximage,0,0,0,0,256,256);
+
+    XFlush(x11);
+
+
   
 
 

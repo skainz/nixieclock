@@ -4,6 +4,7 @@
 #include <QBoxLayout>
 #include <QIcon>
 #include <QLabel>
+#include<X11/Xlib.h>
 
 class NixieClock : public QWidget
 {
@@ -25,6 +26,9 @@ private:
   QImage *resultimage;//(QSize(4*45,64),QImage::Format_RGB32);
   QLabel *il;
   QImage *images[10];
+
+    XImage *ximage;
+    char * data;
 };
 
 #endif
