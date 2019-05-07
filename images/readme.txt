@@ -7,5 +7,9 @@ The single image file where created using ImageMagick, with the following comman
 
 convert -coalesce Nixie2.gif WikipediaNixieDigit%01d.png
 
+XPM files
+
+ls -1 *.png|while read l; do convert ${l} $(basename $l .png).xpm; done
+
 
 
