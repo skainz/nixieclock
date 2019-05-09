@@ -110,9 +110,9 @@ int main ()
       else if (num_ready_fds == 0) {
 	
 	
-	for (int y=0;y<4;y++)
+	for (i=0;i<4;i++)
 	  {
-	    XPutImage(dpy,root,g,images[digs[y]],0,0,150+y*200,150,200,200);
+	    XPutImage(dpy,root,g,images[digs[i]],0,0,150+i*200,150,200,200);
 	  }
 	
 	
@@ -123,9 +123,9 @@ int main ()
       while(XPending(dpy))
 	{
 	  XNextEvent(dpy, &e);
-	  for (int y=0;y<4;y++)
+	  for (i=0;i<4;i++)
 	    {
-	      XPutImage(dpy,root,g,images[digs[y]],0,0,150+y*200,150,200,200);
+	      XPutImage(dpy,root,g,images[digs[i]],0,0,150+i*200,150,200,200);
 	    }
 	  
 	}
