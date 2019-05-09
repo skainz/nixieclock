@@ -26,6 +26,7 @@ static char **digits[]={WikipediaNixieDigit0,
 			WikipediaNixieDigit7,
 			WikipediaNixieDigit8,
 			WikipediaNixieDigit9
+			
 };
 main ()
 {
@@ -34,7 +35,9 @@ main ()
   GC g;
 
     XImage *img;
-
+    XImage *images[10];
+     XEvent e;  
+    int i=0;
   /* open the display (connect to the X server) */
   dpy = XOpenDisplay (getenv ("DISPLAY"));
 
@@ -50,30 +53,47 @@ main ()
   /* set foreground color */
   XSetForeground(dpy, g, WhitePixelOfScreen(DefaultScreenOfDisplay(dpy)) );
 
+  for (i=0;i<10;i++)
+    {
+      XpmCreateImageFromData  (dpy, digits[i], &images[i], NULL, NULL);
+      
+    }
 
- if (XpmCreateImageFromData  (dpy, digits[2], &img, NULL, NULL)) {
+
+    XSelectInput(dpy, root, ExposureMask);
+
+  //   if (XpmCreateImageFromData  (dpy, digits[2], &img, NULL, NULL)) {
 //      printf ("Error reading image\n");
-      exit (1);
-}
+//      exit (1);
+//}
 
   /* draw something */
   while (1)
     {
+    XNextEvent(dpy,&e);
       /* draw a square */
-      XFillRectangle (dpy, root, g, random()%500, random()%500, 50, 40);
+    //  XFillRectangle (dpy, root, g, random()%500, random()%500, 50, 40);
 
-   XPutImage(dpy,root,g,img,0,0,random()%500,random()%500,200,200);
 
+ if( XCheckWindowEvent(dpy, root, ExposureMask, &e) ) {
+  XPutImage(dpy,root,g,images[4],0,0,150,150,200,200);
+
+      } 
+
+
+
+
+ 
       /* once in a while, clear all */
-      if( random()%500<1 )
-        XClearWindow(dpy, root);
+//      if( random()%500<1 )
+//        XClearWindow(dpy, root);
 
 
       /* flush changes and sleep */
-      XFlush(dpy);
+//      XFlush(dpy);
       usleep (10);
     }
 
-
+sleep(100);
   XCloseDisplay (dpy);
 }
