@@ -16,6 +16,8 @@
 #include "images/WikipediaNixieDigit8.xpm"
 #include "images/WikipediaNixieDigit9.xpm"
 
+#define DIGIT_WIDTH 200
+#define DIGIT_HEIGHT 200
 
 static char **digits[]={WikipediaNixieDigit0,
 			WikipediaNixieDigit1,
@@ -33,7 +35,7 @@ static char **digits[]={WikipediaNixieDigit0,
 
 int main ()
 {
-  
+
   struct timeval tv;
   fd_set in_fds;
   int x11_fd;
@@ -41,7 +43,7 @@ int main ()
   tv.tv_sec = 5;
   tv.tv_usec = 0;
   
-  
+  // top/left coords of display
   
   Display *dpy;
   Window root;
@@ -49,6 +51,7 @@ int main ()
   
   XImage *img;
   XImage *images[10];
+  XWindowAttributes xwAttr;
   XEvent e;  
   int i=0;
   
@@ -67,6 +70,13 @@ int main ()
   /* get the root window */
   root = DefaultRootWindow (dpy);
   
+  Status ret = XGetWindowAttributes( dpy, root, &xwAttr );
+
+  srand(time(0)); 
+  int left=rand() % (xwAttr.width-4*DIGIT_WIDTH);
+  int top=rand() %(xwAttr.height-DIGIT_HEIGHT);
+
+
   
   /* create a GC for drawing in the window */
   g = XCreateGC (dpy, root, 0, NULL);
@@ -112,7 +122,7 @@ int main ()
 	
 	for (i=0;i<4;i++)
 	  {
-	    XPutImage(dpy,root,g,images[digs[i]],0,0,150+i*200,150,200,200);
+	    XPutImage(dpy,root,g,images[digs[i]],0,0,150+i*200,top,200,200);
 	  }
 	
 	
@@ -125,7 +135,7 @@ int main ()
 	  XNextEvent(dpy, &e);
 	  for (i=0;i<4;i++)
 	    {
-	      XPutImage(dpy,root,g,images[digs[i]],0,0,150+i*200,150,200,200);
+	      XPutImage(dpy,root,g,images[digs[i]],0,0,150+i*200,top,200,200);
 	    }
 	  
 	}
